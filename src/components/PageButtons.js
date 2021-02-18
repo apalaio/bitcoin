@@ -1,13 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 
-const PageButtons = ({ dataArray }) => {
-  const totalPages = Math.ceil((dataArray.length - 1) / 20);
-  const currentDay = dataArray[dataArray.length - 1];
-
-  let [currentPage, setCurrentPage] = useState(1);
-
+const PageButtons = ({ totalPages, currentPage, setCurrentPage }) => {
   const pageClick = num => {
-    console.log("button was clicked", num);
+    console.log("button was clicked", num, currentPage);
     setCurrentPage(num);
   };
 
@@ -20,6 +15,7 @@ const PageButtons = ({ dataArray }) => {
     setCurrentPage(++currentPage);
     console.log("next page", currentPage);
   };
+
   return (
     <>
       <button onClick={prevClick} disabled={currentPage === 1}>
@@ -29,6 +25,7 @@ const PageButtons = ({ dataArray }) => {
         return (
           <button
             key={index}
+            disabled={currentPage === index + 1}
             onClick={e => {
               pageClick(Number(e.currentTarget.innerText));
             }}

@@ -5,7 +5,6 @@ export const getData = async () => {
   try {
     const response = await fetch(url);
     const jsonResponse = await response.json();
-    console.log(jsonResponse.Data.Data);
     return jsonResponse.Data.Data;
   } catch (e) {
     console.log(e);
