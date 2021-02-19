@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { getData } from "../services/Cryptocompare";
+import { getData } from "../services/ApiConfig";
 import { getCurrentPageData } from "../helpers/GetCurrentPageData";
 import AppContainer from "./AppContainer";
 import Spinner from "react-bootstrap/Spinner";
@@ -9,9 +9,6 @@ function App() {
   const [dataArray, setDataArray] = useState([]);
   let [currentPage, setCurrentPage] = useState(1);
   let [currentPageData, setCurrentPageData] = useState([]);
-
-  const resultsPerPage = 20;
-  const totalPages = Math.ceil(dataArray.length / resultsPerPage);
 
   useEffect(() => {
     async function getArray() {
@@ -28,6 +25,9 @@ function App() {
       );
     }
   }, [currentPage, dataArray]);
+
+  const resultsPerPage = 20;
+  const totalPages = Math.ceil(dataArray.length / resultsPerPage);
 
   return (
     <>
