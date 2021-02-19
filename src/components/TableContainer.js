@@ -1,15 +1,35 @@
 import React from "react";
-import { convertDate } from "../helpers/TimeConversion";
+import TableElement from "./TableElement/TableElement";
+import Table from "react-bootstrap/Table";
 
-const TableContainer = ({ currentPageData }) => {
+const TableContainer = ({ currentPageData, resultsPerPage, currentPage }) => {
+  const numberOffset = resultsPerPage * (currentPage - 1);
   return (
-    <>
-      <span>USD/BTC</span>
-      <span>
-        {convertDate(currentPageData[0].time)} -
-        {convertDate(currentPageData[currentPageData.length - 1].time)}
-      </span>
-    </>
+    <Table striped bordered hover responsive="md">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Date</th>
+          <th>High</th>
+          <th>Low</th>
+          <th>High-Low</th>
+          <th>Open</th>
+          <th>Close</th>
+          <th>Close-Open</th>
+        </tr>
+      </thead>
+      <tbody>
+        {currentPageData.map((day, index) => {
+          return (
+            <TableElement
+              day={day}
+              rowNum={index + 1 + numberOffset}
+              key={index}
+            />
+          );
+        })}
+      </tbody>
+    </Table>
   );
 };
 

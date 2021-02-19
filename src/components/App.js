@@ -1,9 +1,9 @@
-import React, { useState, useEffect, Children } from "react";
+import React, { useState, useEffect } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { getData } from "../services/Cryptocompare";
-import { convertDate } from "../helpers/TimeConversion";
 import { getCurrentPageData } from "../helpers/GetCurrentPageData";
-import PageButtons from "./PageButtons";
-import TableContainer from "./TableContainer";
+import AppContainer from "./AppContainer";
+import Spinner from "react-bootstrap/Spinner";
 
 function App() {
   const [dataArray, setDataArray] = useState([]);
@@ -16,7 +16,6 @@ function App() {
   useEffect(() => {
     async function getArray() {
       setDataArray(await getData());
-      console.log(dataArray);
       return dataArray;
     }
     if (!dataArray.length) {
@@ -24,76 +23,42 @@ function App() {
     }
 
     if (dataArray.length) {
-      // console.log(
-      //   "dataArray.length got accessed",
-      //   dataArray.length,
-      //   Boolean(dataArray)
-      // );
       setCurrentPageData(
         getCurrentPageData(currentPage, dataArray, resultsPerPage)
       );
     }
   }, [currentPage, dataArray]);
 
-  /** 2 USEEFFECTS 
-  // useEffect(() => {
-  //   async function getArray() {
-  //     setDataArray(await getData());
-  //     console.log(dataArray);
-  //     return dataArray;
-  //   }
-
-  //   getArray();
-  //   setCurrentPageData(
-  //     getCurrentPageData(currentPage, dataArray, resultsPerPage)
-  //   );
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log("just entered 2nd useEffect ");
-  //   if (dataArray.length) {
-  //     console.log(
-  //       "dataArray.length got accessed",
-  //       dataArray.length,
-  //       Boolean(dataArray)
-  //     );
-  //     setCurrentPageData(
-  //       getCurrentPageData(currentPage, dataArray, resultsPerPage)
-  //     );
-  //   }
-  // }, [currentPage, dataArray]);
-  */
-
-  console.log("how many times?", currentPageData[0]);
-
   return (
-    <div className="App">
+    <>
       {dataArray && currentPageData.length ? (
         <>
-          <TableContainer currentPageData={currentPageData} />
-          <PageButtons
+          <AppContainer
+            currentPageData={currentPageData}
             totalPages={totalPages}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
+            resultsPerPage={resultsPerPage}
           />
         </>
       ) : (
-        <div></div>
+        <Spinner
+          animation="grow"
+          role="status"
+          style={{
+            position: "fixed",
+            margin: "auto",
+            top: "0",
+            left: "0",
+            bottom: "0",
+            right: "0",
+          }}
+        >
+          <span className="sr-only">Loading...</span>
+        </Spinner>
       )}
-    </div>
+    </>
   );
 }
 
 export default App;
-
-// The API returns 101 days worth of data in ASCENDING time
-// That means the most current date is LAST (index 100)
-// Which in turns means that, to display results i have to iterate
-// through the days object in REVERSE order, starting from index 100
-
-//Entry #101 is the current date
-//Every 00.00 (12am) UTC/GMT a new day is added
-
-// //IF current day does not show with the rest of the results:
-// const tableData = [...dataArray];
-// const currentDay = tableData.pop();
